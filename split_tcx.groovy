@@ -21,17 +21,15 @@ def root = new XmlParser(false, false).parse(new File(inFile))
 def activitiesNode = root.children().find {it -> it.name().equals('Activities')}
 def activities = activitiesNode.children().findAll{it.name().equals('Activity')}
 
-activities = activities.sort {n ->
-	n.find {it -> it.name().equals('Lap')}.@StartTime
-}
-
 println "Found ${activities.size()} activites."
 
-if (onlyLast) {
-	activities = [activities[-1]]
+activities = activities.sort {activity ->
+	activity.find {c -> c.name().equals('Lap')}.@StartTime
 }
 
-activities.forEach {activity ->
+def outputSet = onlyLast ? [activities[-1]] : activities
+
+outputSet.forEach {activity ->
 	activitiesNode.children().clear()
 	activitiesNode.children().add(activity)
 
