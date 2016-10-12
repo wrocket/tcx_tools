@@ -40,8 +40,8 @@ this.args.each { arg ->
 println "Reading ${inFile}..."
 
 def root = new XmlParser(false, false).parse(new File(inFile))
-def activitiesNode = root.children().find {it -> it.name().equals('Activities')}
-def activities = activitiesNode.children().findAll{it.name().equals('Activity')}
+def activitiesNode = root.children().find { it.name().equals('Activities') }
+def activities = activitiesNode.children().findAll{ it.name().equals('Activity') }
 
 println "Found ${activities.size()} activites."
 
@@ -60,8 +60,8 @@ outputSet.forEach {activity ->
 	def fileName = "${sanitizedId}_${sport}.tcx"
 
 	File outFile = new File(fileName)
-    outFile.write(new XmlUtil().serialize(root))
-    println "\tWrote ${fileName}"
+	outFile.write(new XmlUtil().serialize(root))
+	println "\tWrote ${fileName}"
 }
 
 println "Done."
