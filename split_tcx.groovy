@@ -14,12 +14,11 @@ activites.forEach {activity ->
 	activitiesNode.children().clear()
 	activitiesNode.children().add(activity)
 
-	def sanitizedId = activity.Id.text().replace(':', '_').replace('.', '_')
+	def sanitizedId = activity.Id.text().replaceAll(/\W+/, '_')
 	def sport = activity.@Sport
 	def fileName = "${sanitizedId}_${sport}.tcx"
 
-	def newXml = new XmlUtil().serialize(root)
-	File file = new File(fileName)
-    file.write newXml
+	File outFile = new File(fileName)
+    outFile.write(new XmlUtil().serialize(root))
     println "\tWrote ${fileName}"
 }
