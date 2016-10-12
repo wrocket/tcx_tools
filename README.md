@@ -13,7 +13,7 @@ This little Groovy script splits TCX files composed of several activities into i
  
     $ groovy split_tcx.groovy some_large_file.tcx 
     Reading some_large_file.tcx...
-    Found 12 activites.
+    Found 12 activities.
 	    Wrote 2016_09_22T23_31_05Z_Running.tcx
 	    Wrote 2016_09_23T16_21_37Z_Running.tcx
 	    Wrote 2016_09_26T17_30_34Z_Running.tcx
@@ -32,6 +32,6 @@ This little Groovy script splits TCX files composed of several activities into i
 
     $ groovy split_tcx.groovy some_large_file.tcx --onlylast
     Reading some_large_file.tcx...
-    Found 12 activites.
+    Found 12 activities.
 	    Wrote 2016_10_11T13_43_16Z_Biking.tcx
     Done.

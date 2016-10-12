@@ -43,7 +43,7 @@ def root = new XmlParser(false, false).parse(new File(inFile))
 def activitiesNode = root.children().find { it.name().equals('Activities') }
 def activities = activitiesNode.children().findAll{ it.name().equals('Activity') }
 
-println "Found ${activities.size()} activites."
+println "Found ${activities.size()} activities."
 
 activities = activities.sort {activity ->
 	activity.find {c -> c.name().equals('Lap')}.@StartTime
