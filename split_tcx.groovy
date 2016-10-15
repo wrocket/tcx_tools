@@ -22,20 +22,43 @@
 
 import groovy.xml.XmlUtil
 
-def onlyLast = false
-def inFile = null
+def cli = new CliBuilder(usage: 'split_tcx.groovy [options] [input file]', header: 'Options:')
+cli.help('Print this message')
+cli.recent(args:1, argName: 'N', 'Only export the N most recent entries')
+cli.onlyLast('Equivalent to -recent 1')
+def options = cli.parse(args)
 
-this.args.each { arg ->
-	if ('--onlylast'.equals(arg)) {
-		onlyLast = true
-	} else if (inFile == null) {
-		inFile = arg
-	} else {
-		println("Unknown argument ${arg}")
-		println('Usage: split_tcx.groovy [in file] [--onlylast]')
+int lastNActivities = 0
+
+if (options.help) {
+	cli.usage()
+	System.exit(-1)
+}
+
+if (options.recent) {
+	try {
+		lastNActivities = Integer.parseInt(options.recent)
+	} catch (NumberFormatException) {
+		println "Value '${options.recent}' not a valid number, see -help for more information."
 		System.exit(-1)
 	}
+
+	if (lastNActivities <= 0) {
+		println "Last-N-entries must be positive, see -help for more information."
+		System.exit(-1)
+	}
+} 
+
+if (options.onlyLast) {
+	lastNActivities = 1
 }
+
+if (options.arguments() == null || options.arguments().size() != 1) {
+	println "One (and only one) input file must be specified. Try -help for more information."
+	System.exit(-1)
+}
+
+def inFile = options.arguments()[0]
 
 println "Reading ${inFile}..."
 
@@ -49,7 +72,7 @@ activities = activities.sort {activity ->
 	activity.find {c -> c.name().equals('Lap')}.@StartTime
 }
 
-def outputSet = onlyLast ? [activities[-1]] : activities
+def outputSet = lastNActivities > 0 ? activities.takeRight(lastNActivities) : activities
 
 outputSet.forEach {activity ->
 	activitiesNode.children().clear()
